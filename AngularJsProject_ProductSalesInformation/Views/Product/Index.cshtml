@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="~/customJs/Module.js"></script>
+<script src="~/customJs/Controller.js"></script>
+<script src="~/customJs/Service.js"></script>
+
+<div ng-app="myModule" ng-controller="myController" style="background-color:lavender">
+    <div class="container">
+        <div class="alert alert-info alert-dismissable" role="alert" ng-if="message">
+            {{message}}
+            <button type="submit" class="close" aria-label="close">
+                <span aria-hidden="true" ng-click="ClearMessage()">&times;</span>
+            </button>
+        </div>
+        <hr />
+        <div>
+            <button style="width:auto" class="btn btn-sm btn-info float-right" data-toggle="modal" data-target="#myModal">Add Product</button>
+        </div>
+        <br />
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    @*<th>Sl No</th>*@
+                    <th>Sales Date</th>
+                    <th>Product Name</th>
+                    <th>Brand</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="product in Products | orderBy:'JsProductId' | limitTo:rowLimit">
+                    @*<td>{{product.JsProductId}}</td>*@
+                    <td>{{product.SalesDate | date:'dd/MM/yyyy'}}</td>
+                    <td>{{product.Name}}</td>
+                    <td>{{product.Brand}}</td>
+                    <td>{{product.Quantity}}</td>
+                    <td>{{product.Price | currency : symbol : fractionSize}}</td>
+                    <td><button type="submit" data-toggle="modal" data-target="#editModal" ng-click="SelectedProduct(product)" class="btn btn-primary glyphicon glyphicon-edit">Edit</button></td>
+                    <td><button type="submit" data-toggle="modal" data-target="#deleteModal" ng-click="SelectedProduct(product)" class="btn btn-danger glyphicon glyphicon-trash">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="modal fade" id="myModal" role="dialog" style="background-color:linen">
+            <div class="modal-dialog">
+                <div class="modal-content" style="background-color:cadetblue">
+                    <div class="modal-header">
+                        <h2 class="modal-title" style="text-align:center; font-family:Algerian">Add New Product</h2>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Sales Date</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" ng-model="newProduct.SalesDate" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Product Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" ng-model="newProduct.Name" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Brand</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" ng-model="newProduct.Brand" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Quantity</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" ng-model="newProduct.Quantity" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Price</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" ng-model="newProduct.Price" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-10 col-sm-10">
+                                    <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="AddProduct()">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="editModal" role="dialog" style="background-color:darkcyan">
+            <div class="modal-dialog">
+                <div class="modal-content" style="background-color:gainsboro">
+                    <div class="modal-header">
+                        <h2 class="modal-title" style="text-align:center; font-family:Algerian">Update Product</h2>
+
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <input type="hidden" ng-model="clickedProduct.JsProductId" />
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Sales Date</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" ng-model="clickedProduct.SalesDate" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Product Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" ng-model="clickedProduct.Name" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Brand</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" ng-model="clickedProduct.Brand" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Quantity</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" ng-model="clickedProduct.Quantity" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Price</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" ng-model="clickedProduct.Price" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-10 col-sm-10">
+                                    <button type="submit" class="btn btn-primary" data-dismiss="modal" ng-click="UpdateProduct()">Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="deleteModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Product</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <strong style="color:red;">Are you sure that you want to delete {{ clickedProduct.Name}}'s Information?</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default" data-dismiss="modal" ng-click="DeleteProduct()">Yes</button>
+                        <button type="submit" class="btn btn-default" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
